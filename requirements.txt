@@ -1,0 +1,9 @@
+ultralytics
+opencv-python
+onnxruntime
+numpy
+torch
+torchvision
+librosa
+requests
+python-dotenv
