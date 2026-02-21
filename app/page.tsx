@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import Leaflet map (no SSR — Leaflet needs window/document)
+const LiveMap = dynamic(() => import("./components/LiveMap"), { ssr: false });
 
 // ── Types ──────────────────────────────────────────────────────────────
 interface Detection {
@@ -126,6 +130,14 @@ export default function Home() {
         })}
       </div>
 
+      {/* Live Map */}
+      <div style={styles.mapContainer}>
+        <h2 style={styles.mapTitle}>Live Corridor Map</h2>
+        <div style={styles.mapWrapper}>
+          <LiveMap active={isGreen} />
+        </div>
+      </div>
+
       {/* Live log */}
       <div style={styles.logContainer}>
         <h2 style={styles.logTitle}>Live Detection Log</h2>
@@ -228,6 +240,23 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "0.8rem",
     opacity: 0.7,
     textTransform: "uppercase",
+  },
+  mapContainer: {
+    width: "100%",
+    maxWidth: 820,
+    marginBottom: "2.5rem",
+  },
+  mapTitle: {
+    fontSize: "1.1rem",
+    fontWeight: 600,
+    marginBottom: "0.75rem",
+  },
+  mapWrapper: {
+    width: "100%",
+    height: 380,
+    borderRadius: 12,
+    overflow: "hidden",
+    border: "1px solid rgba(255,255,255,0.1)",
   },
   logContainer: {
     width: "100%",
