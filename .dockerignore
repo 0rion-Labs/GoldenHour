@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+.next/
+.venv/
+
+# Docker
+Dockerfile*
+docker-compose.yml
+.dockerignore
+
+# Dev/build artifacts
+*.mp4
+*.pt
+*.onnx
+*.log
+__pycache__/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docs
+*.md
+*.docx
+LICENSE
