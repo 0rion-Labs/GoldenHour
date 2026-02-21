@@ -10,9 +10,10 @@
 !.yarn/releases
 !.yarn/versions
 
+
 # testing
 /coverage
-
+OrionCoders_SRS_v3.docx
 # next.js
 /.next/
 /out/

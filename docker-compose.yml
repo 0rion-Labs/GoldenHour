@@ -1,0 +1,62 @@
+# ──────────────────────────────────────────────────────────────────────────
+# GoldenHour — AI Green Corridor System
+# Single-command startup: docker compose up --build
+# ──────────────────────────────────────────────────────────────────────────
+
+services:
+  # ── AI Detection Engine (Python + YOLOv8) ──
+  ai-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile.ai
+    container_name: goldenhour-ai
+    restart: always
+    volumes:
+      - ./ambulance.mp4:/app/ambulance.mp4:ro
+    environment:
+      - API_URL=http://dashboard:3000/api/detection
+    depends_on:
+      - dashboard
+    # For GUI display (X11 forwarding on Linux):
+    # environment:
+    #   - DISPLAY=${DISPLAY}
+    # volumes:
+    #   - /tmp/.X11-unix:/tmp/.X11-unix
+
+  # ── Next.js Traffic Dashboard ──
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: goldenhour-dashboard
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+
+  # ── Redis (message broker + caching) ──
+  redis:
+    image: redis:7-alpine
+    container_name: goldenhour-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  # ── MongoDB (incident analytics storage) ──
+  mongodb:
+    image: mongo:7
+    container_name: goldenhour-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=goldenhour
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  redis-data:
+  mongo-data:
